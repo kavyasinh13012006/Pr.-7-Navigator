@@ -3,45 +3,40 @@ import { Link, useNavigate } from 'react-router-dom'
 
 function View() {
     const [recode, setrecode] = useState(JSON.parse(localStorage.getItem('curd')) || [])
-    const [selectedIds, setSelectedIds] = useState([]) // स्टेट जिसमें सेलेक्टेड IDs होंगी
-    const [filterStatus, setFilterStatus] = useState("All") // फ़िल्टर स्टेटस को स्टोर करें
+    const [selectedIds, setSelectedIds] = useState([])
+    const [filterStatus, setFilterStatus] = useState("All")
     let navigate = useNavigate()
 
-    // एक आइटम को डिलीट करना
     const deletDeta = (id) => {
         let del = recode.filter((val) => val.id !== id)
         setrecode(del)
         localStorage.setItem('curd', JSON.stringify(del))
     }
 
-    // सभी सेलेक्टेड आइटम्स को डिलीट करना
     const allDelet = () => {
-        let del = recode.filter((val) => !selectedIds.includes(val.id)) // जो सेलेक्टेड नहीं हैं उन्हें रखें
+        let del = recode.filter((val) => !selectedIds.includes(val.id))
         setrecode(del)
         localStorage.setItem('curd', JSON.stringify(del))
-        setSelectedIds([]) // सभी IDs को रिसेट करें
+        setSelectedIds([])
     }
 
-    // Check All या Uncheck All functionality
     const toggleSelectAll = (e) => {
         if (e.target.checked) {
-            const allIds = recode.map((val) => val.id) // सभी IDs को सेलेक्ट करें
+            const allIds = recode.map((val) => val.id)
             setSelectedIds(allIds)
         } else {
-            setSelectedIds([]) // सभी को अनसेलेक्ट करें
+            setSelectedIds([])
         }
     }
 
-    // किसी एक आइटम को सेलेक्ट या अनसेलेक्ट करना
     const toggleSelected = (id) => {
         if (selectedIds.includes(id)) {
-            setSelectedIds(selectedIds.filter((selectedId) => selectedId !== id)) // अनसेलेक्ट करें
+            setSelectedIds(selectedIds.filter((selectedId) => selectedId !== id))
         } else {
-            setSelectedIds([...selectedIds, id]) // सेलेक्ट करें
+            setSelectedIds([...selectedIds, id])
         }
     }
 
-    // स्टेटस को एक्टिव और डिएक्टिव में टॉगल करना
     const statusDeta = (id, actvity) => {
         let up = recode.map((val) => {
             if (val.id == id) {
@@ -53,24 +48,22 @@ function View() {
         localStorage.setItem('curd', JSON.stringify(up))
     }
 
-    // Status फ़िल्टरिंग
     const filteredRecode = recode.filter((val) => {
-        if (filterStatus === "All") return true; // सभी दिखाएं
-        return val.actvity === filterStatus.toLowerCase(); // केवल चुना हुआ स्टेटस दिखाएं (active या deactive)
+        if (filterStatus === "All") return true;
+        return val.actvity === filterStatus.toLowerCase();
     });
 
     return (
         <>
             <h1>View Data</h1>
 
-            {/* Filter Buttons */}
 
             <table>
                 <tr>
                     <td>
                         <button onClick={allDelet}>Delete Selected</button>
                     </td>
-                    
+
                     <td>
                         <div>
                             <button onClick={() => setFilterStatus("All")}>All</button>
@@ -102,7 +95,7 @@ function View() {
                 </thead>
                 <tbody>
                     {
-                        filteredRecode.map((val) => { // फ़िल्टर किए हुए रिकॉर्ड्स को दिखाएं
+                        filteredRecode.map((val) => {
                             return (
                                 <tr key={val.id}>
                                     <td>
